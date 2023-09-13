@@ -1,1 +1,1 @@
-# NeovimZero2Hero
+# Neovim Config
