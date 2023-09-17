@@ -75,9 +75,10 @@ return {
     {
         "kamykn/spelunker.vim",
         event = "VeryLazy",
-        config = function()
-            vim.g.spelunker_check_type = 2
-        end
+        -- config = function()
+        --    vim.g.spelunker_check_type = 2
+        -- end;
+        config = false
     },
     {
         "ellisonleao/glow.nvim",

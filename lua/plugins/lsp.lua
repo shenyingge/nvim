@@ -67,7 +67,20 @@ return {
         require("neodev").setup()
         require("fidget").setup()
         require("lspsaga").setup()
-        require("mason").setup()
+        local mason = require('mason')
+        mason.setup({
+            -- ... 其他的配置
+            lsp = {
+                cpp = {
+                    provider = 'clangd', -- 使用 clangd 作为 LSP provider
+                    setup = {
+                        cmd = { "clangd", "--background-index" },
+                        filetypes = { "c", "cpp", "cc", "objc", "objcpp" },
+                        -- ... 其他 clangd 设置
+                    },
+                },
+            },
+        })
         local capabilities = require('cmp_nvim_lsp').default_capabilities()
         require("mason-lspconfig").setup({
             ensure_installed = vim.tbl_keys(servers),
