@@ -11,7 +11,7 @@ M.copilot = {
 			accept = "<Tab>",
 			refresh = "gr",
 			open = "<M-CR>",
-      accept_selected = "<M-CR>",
+			accept_selected = "<M-CR>",
 		},
 	},
 }

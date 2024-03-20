@@ -15,3 +15,4 @@ cmp.setup({
 		["<Down>"] = cmp.mapping.select_next_item(),
 	},
 })
+
