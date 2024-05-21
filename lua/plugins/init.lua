@@ -7,7 +7,20 @@ return {
 			require("configs.conform")
 		end,
 	},
-
+  {
+    "folke/flash.nvim",
+    event = "VeryLazy",
+    ---@type Flash.Config
+    opts = {},
+    -- stylua: ignore
+    keys = {
+      { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
+      { "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
+      { "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
+      { "R", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
+      { "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
+    },
+  },
 	{
 		"nvim-tree/nvim-tree.lua",
 		opts = {
@@ -32,70 +45,24 @@ return {
 			},
 		},
 	},
-	{
-		"zbirenbaum/copilot.lua",
-		-- Lazy load when event occurs. Events are triggered
-		-- as mentioned in:
-		-- https://vi.stackexchange.com/a/4495/20389
-		event = "InsertEnter",
-		-- You can also have it load at immediately at
-		-- startup by commenting above and uncommenting below:
-		-- lazy = false
-		opts = overrides.copilot,
-	},
+	-- {
+	-- 	"zbirenbaum/copilot.lua",
+	-- 	-- Lazy load when event occurs. Events are triggered
+	-- 	-- as mentioned in:
+	-- 	-- https://vi.stackexchange.com/a/4495/20389
+	-- 	event = "IniertEnter",
+	-- 	-- You can also have it load at immediately at
+	-- 	-- startup by commenting above and uncommenting below:
+	-- 	-- lazy = false
+	-- 	opts = overrides.copilot,
+	-- },
 	{ "RRethy/vim-illuminate", event = "VimEnter" },
-	{
-		"rmagatti/goto-preview",
-		lazy = true,
-		keys = { "gp" },
-		config = function()
-			-- close current preview window
-			require("goto-preview").setup({
-				width = 120,
-				height = 25,
-				default_mappings = true,
-				debug = false,
-				opacity = nil,
-				post_open_hook = nil,
-				-- You can use "default_mappings = true" setup option
-				-- Or explicitly set keybindings
-				-- vim.cmd("nnoremap gpd <cmd>lua require('goto-preview').goto_preview_definition()<CR>")
-				-- vim.cmd("nnoremap gpi <cmd>lua require('goto-preview').goto_preview_implementation()<CR>")
-				vim.cmd("nnoremap <ESC> <cmd>lua require('goto-preview').close_all_win()<CR>"),
-			})
-		end,
-	},
 	{
 		"kylechui/nvim-surround",
 		lazy = true,
 		keys = { "cs", "ds", "ys" },
 		config = function()
 			require("nvim-surround").setup({})
-		end,
-	},
-	{
-		"ethanholz/nvim-lastplace",
-		lazy = true,
-		event = { "User FileOpened" },
-		config = function()
-			require("nvim-lastplace").setup({
-				lastplace_ignore_buftype = { "quickfix", "nofile", "help" },
-				lastplace_ignore_filetype = {
-					"gitcommit",
-					"gitrebase",
-					"svn",
-					"hgcommit",
-				},
-				lastplace_open_folds = true,
-			})
-		end,
-	},
-	{
-		"folke/todo-comments.nvim",
-		lazy = true,
-		event = { "User FileOpened" },
-		config = function()
-			require("todo-comments").setup()
 		end,
 	},
 	{
@@ -168,56 +135,6 @@ return {
 			}
 			require("symbols-outline").setup(opts)
 		end,
-	},
-	{
-		"anuvyklack/windows.nvim",
-		lazy = true,
-		cmd = { "WindowsMaximize", "WindowsMaximizeVertically", "WindowsMaximizeHorizontally", "WindowsEqualize" },
-		dependencies = {
-			"anuvyklack/middleclass",
-		},
-		config = function()
-			require("windows").setup({
-				autowidth = {
-					enable = false,
-				},
-				ignore = {
-					buftype = { "quickfix" },
-					filetype = {
-						"NvimTree",
-						"neo-tree",
-						"undotree",
-						"gundo",
-						"qf",
-						"toggleterm",
-						"TelescopePrompt",
-						"alpha",
-						"netrw",
-					},
-				},
-			})
-		end,
-	},
-	{
-		"nvim-zh/colorful-winsep.nvim",
-		lazy = true,
-		event = "WinNew",
-		config = function()
-			require("colorful-winsep").setup()
-		end,
-	},
-	{
-		"folke/which-key.nvim",
-		event = "VeryLazy",
-		init = function()
-			vim.o.timeout = true
-			vim.o.timeoutlen = 300
-		end,
-		opts = {
-			-- your configuration comes here
-			-- or leave it empty to use the default settings
-			-- refer to the configuration section below
-		},
 	},
   { 'nvim-telescope/telescope-fzf-native.nvim', build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
 }

@@ -58,4 +58,7 @@ vim.schedule(function()
 end)
 
 vim.opt.undofile = false
+vim.api.nvim_set_keymap('n', '<C-j>', '10j', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<C-k>', '10k', {noremap = true, silent = true})
+
 
