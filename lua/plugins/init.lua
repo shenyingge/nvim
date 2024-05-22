@@ -26,9 +26,11 @@ return {
 		opts = {
 			git = { enable = true },
 		},
+    cond = not vim.g.vscode,
 	},
 	{
 		"neovim/nvim-lspconfig",
+    cond = not vim.g.vscode,
 		config = function()
 			require("nvchad.configs.lspconfig").defaults()
 			require("configs.lspconfig")
@@ -36,6 +38,7 @@ return {
 	},
 	{
 		"williamboman/mason.nvim",
+    cond = not vim.g.vscode,
 		opts = {
 			ensure_installed = {
 				"lua-language-server",
@@ -45,29 +48,19 @@ return {
 			},
 		},
 	},
-	-- {
-	-- 	"zbirenbaum/copilot.lua",
-	-- 	-- Lazy load when event occurs. Events are triggered
-	-- 	-- as mentioned in:
-	-- 	-- https://vi.stackexchange.com/a/4495/20389
-	-- 	event = "IniertEnter",
-	-- 	-- You can also have it load at immediately at
-	-- 	-- startup by commenting above and uncommenting below:
-	-- 	-- lazy = false
-	-- 	opts = overrides.copilot,
-	-- },
 	{ "RRethy/vim-illuminate", event = "VimEnter" },
 	{
 		"kylechui/nvim-surround",
 		lazy = true,
 		keys = { "cs", "ds", "ys" },
 		config = function()
-			require("nvim-surround").setup({})
+			require("nvim-surround").setup()
 		end,
 	},
 	{
 		"simrat39/symbols-outline.nvim",
 		lazy = true,
+    cond = not vim.g.vscode,
 		cmd = { "SymbolsOutline", "SymbolsOutlineOpen", "SymbolsOutlineClose" },
 		config = function()
 			local opts = {
@@ -133,8 +126,17 @@ return {
 					Fragment = { icon = "", hl = "@constant" },
 				},
 			}
-			require("symbols-outline").setup(opts)
+			require("smmbols-outline").setup(opts)
 		end,
 	},
-  { 'nvim-telescope/telescope-fzf-native.nvim', build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
+	{
+		"nvim-telescope/telescope-fzf-native.nvim",
+		build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build",
+	},
+	{
+    "vscode-neovim/vscode-multi-cursor.nvim",
+    event = 'VeryLazy',
+    cond = not not vim.g.vscode,
+    opts = {},
+  }
 }

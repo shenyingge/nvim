@@ -46,7 +46,28 @@ require('telescope').setup {
 -- load_extension, somewhere after setup function:
 require('telescope').load_extension('fzf')
 
+if vim.g.vscode then
+  require('vscode-multi-cursor').setup { -- Config is optional
+    -- Whether to set default mappings
+    default_mappings = true,
+    -- If set to true, only multiple cursors will be created without multiple selections
+    no_selection = false
+  }
 
+  local cursors = require('vscode-multi-cursor')
+
+  local k = vim.keymap.set
+  k({ 'n', 'x' }, 'mc', cursors.create_cursor, { expr = true, desc = 'Create cursor' })
+  k({ 'n' }, 'mcc', cursors.cancel, { desc = 'Cancel/Clear all cursors' })
+  k({ 'n', 'x' }, 'mi', cursors.start_left, { desc = 'Start cursors on the left' })
+  k({ 'n', 'x' }, 'mI', cursors.start_left_edge, { desc = 'Start cursors on the left edge' })
+  k({ 'n', 'x' }, 'ma', cursors.start_right, { desc = 'Start cursors on the right' })
+  k({ 'n', 'x' }, 'mA', cursors.start_right, { desc = 'Start cursors on the right' })
+  k({ 'n' }, '[mc', cursors.prev_cursor, { desc = 'Goto prev cursor' })
+  k({ 'n' }, ']mc', cursors.next_cursor, { desc = 'Goto next cursor' })
+  k({ 'n' }, 'mcs', cursors.flash_char, { desc = 'Create cursor using flash' })
+  k({ 'n' }, 'mcw', cursors.flash_word, { desc = 'Create selection using flash' })
+end
 -- load theme
 dofile(vim.g.base46_cache .. "defaults")
 dofile(vim.g.base46_cache .. "statusline")
@@ -62,3 +83,27 @@ vim.api.nvim_set_keymap('n', '<C-j>', '10j', {noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<C-k>', '10k', {noremap = true, silent = true})
 
 
+vim.api.nvim_set_keymap('n', '<C-j>', '10j', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<C-k>', '10k', {noremap = true, silent = true})
+
+
+local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
+
+parser_config.your_language = {
+  -- 要禁用高亮的语言，替换 `your_language` 为目标语言，例如 'python' 或 'lua'
+  highlight = {
+    -- 这里通过修改 highlight 模块，覆盖默认高亮规则
+    injections = {
+      -- 禁用特定单词的高亮
+      ["gold"] = false,
+      ["silver"] = false,
+    },
+  },
+}
+
+require'nvim-treesitter.configs'.setup {
+  highlight = {
+    enable = true,              -- 启用高亮
+    additional_vim_regex_highlighting = false,
+  },
+}

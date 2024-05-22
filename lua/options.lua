@@ -5,8 +5,8 @@ local cmp = require("cmp")
 cmp.setup({
 	mapping = {
 		["<Tab>"] = function(fallback)
-			if cmp.visible() then
-				cmp.confirm({ select = true })
+      if cmp.visible() then
+        cmp.confirm({ select = true })
 			else
 				fallback()
 			end
