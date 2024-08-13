@@ -1,10 +1,9 @@
 vim.g.base46_cache = vim.fn.stdpath "data" .. "/nvchad/base46/"
-vim.g.mapleader = ","
+vim.g.mapleader = " "
 vim.opt.relativenumber = true
-
-
 -- bootstrap lazy and all plugins
 local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
+
 
 if not vim.loop.fs_stat(lazypath) then
   local repo = "https://github.com/folke/lazy.nvim.git"
@@ -26,7 +25,7 @@ require("lazy").setup({
       require "options"
     end,
   },
-  { import = "plugins" },
+ { import = "custom.plugins" },
 }, lazy_config)
 
 -- You dont need to set any of these options. These are the default ones. Only
@@ -75,7 +74,7 @@ dofile(vim.g.base46_cache .. "statusline")
 require "nvchad.autocmds"
 
 vim.schedule(function()
-  require "mappings"
+ require "mappings"
 end)
 
 vim.opt.undofile = false
@@ -104,6 +103,58 @@ parser_config.your_language = {
 require'nvim-treesitter.configs'.setup {
   highlight = {
     enable = true,              -- 启用高亮
-    additional_vim_regex_highlighting = false,
-  },
+    additional_vim_regex_highlighting = false,},
 }
+
+
+require("toggleterm").setup({
+    open_mapping = [[<c-\>]],
+    -- 打开新终端后自动进入插入模式
+    start_in_insert = true,
+    -- 在当前buffer的下方打开新终端
+    direction = 'horizontal'
+})
+vim.keymap.set("t", "<Esc>", "<C-\\><C-N>")
+-- vim.keymap.set("t", "jk", [[<C-\><C-n>]], {noremap = true, silent = true})
+-- vim.keymap.set("t", "<C-h>", [[<C-\><C-n><C-W>h]], {noremap = true, silent = true})
+-- vim.keymap.set("t", "<C-j>", [[<C-\><C-n><C-W>j]], {noremap = true, silent = true})
+-- vim.keymap.set("t", "<C-k>", [[<C-\><C-n><C-W>k]], {noremap = true, silent = true})
+-- vim.keymap.set("t", "<C-l>", [[<C-\><C-n><C-W>l]], {noremap = true, silent = true})
+--
+-- Auto-format Python files on save
+-- vim.api.nvim_create_autocmd("BufWritePre", {
+--   pattern = "*.py",
+--   callback = function()
+--     -- Format with black and trim whitespace
+--     vim.lsp.buf.format({ async = false })
+--   end,
+-- })
+
+
+-- Trim space
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = "*.py",
+  callback = function()
+    -- Save the current cursor position
+    local cursor_pos = vim.api.nvim_win_get_cursor(0)
+    -- Execute the command to trim trailing whitespace
+    vim.cmd([[%s/\s\+$//e]])
+    -- Restore the cursor position
+    vim.api.nvim_win_set_cursor(0, cursor_pos)
+  end,
+})
+-- Ensure a newline at EOF
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = "*.py",
+  callback = function()
+    local last_line = vim.fn.line('$')
+    local last_line_content = vim.fn.getline(last_line)
+    if last_line_content ~= "" then
+      vim.cmd("normal! Go")  -- Go to last line and insert a newline
+    end
+  end,
+})
+
+vim.opt.termguicolors = true
+
+vim.api.nvim_set_keymap('n', '<Leader>q', ':qa<CR>', {noremap = true, silent = true, desc = "quit all windows"})
