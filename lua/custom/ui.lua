@@ -12,7 +12,7 @@ M.ui = {
 	changed_themes = {},
 	theme_toggle = { "bearded-arc", "one_light" },
 	theme = "bearded-arc", -- default theme
-	transparency = false,
+	transparency = true,
 
 	cmp = {
 		icons = true,

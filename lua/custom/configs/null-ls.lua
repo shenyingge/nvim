@@ -14,7 +14,7 @@ local mypy_config_path = config_dir .. "lua/custom/configs/mypy.ini"
 
 local opts = {
   sources = {
-    null_ls.builtins.diagnostics.mypy.with {
+    null_ls.builtins.diagnostics.mypy.with({
       extra_args = function()
         local virtual = os.getenv("VIRTUAL_ENV") or os.getenv("CONDA_PREFIX") or "/usr"
         return {
@@ -22,8 +22,7 @@ local opts = {
           "--config-file", mypy_config_path
         }
       end,
-
-    },
+    }),
     null_ls.builtins.diagnostics.ruff,
     null_ls.builtins.formatting.black.with({
       command = "black",                       -- 确保这里是正确的
